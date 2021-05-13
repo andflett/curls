@@ -1,13 +1,14 @@
+import axios from "axios"
 
 export default async function SendQuestion(req, res) {
 
   console.log(req)
 
-  await SendEmail(req.body.message).then(response =>
+  await SendEmail('hi', 'there').then(response =>
     res.status(200).json({ response })
   )
 
-});
+}
 
 async function SendEmail(message, subject) {
 
@@ -21,20 +22,20 @@ async function SendEmail(message, subject) {
     "content": [
       {
         "type": "text/html",
-        "value": `<p>${message}</p><p><a href="">Check any time here</a></p>`
+        "value": `<p>${message}</p><br /><p><a href="">Check again any time here</a></p>`
       }
     ],
     "subject": `${subject}`,
     "personalizations": [
       {
         "to": [{
-          "email": "cristinanlfonseca@gmail.com",
+          "email": "andrflett@gmail.com",
           "name": "Cris"
         }]
       }
     ],
     "from": {
-      "email": 'andrflett@gmail.com'
+      "email": 'andrflett@gmail.com',
       "name": 'Andrew Flett'
     }
   }
