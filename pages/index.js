@@ -10,10 +10,20 @@ export default function Home() {
 
   const [ stockData, setStockData ] = useState(null);
 
+  const checkStock = () => {
+    setStockData(null)
+    fetch('https://simplescraper.io/api/TLm08ZmWuIodHtRNwSNX?apikey=hfpizYVrbuiovbYHofYOjbQxynacovxP&limit=100&run_now=true', { method: 'GET' })
+      .then(response => response.json())
+      .then(data => setStockData(data))
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
 
-    fetch('https://www.boots.com/webapp/wcs/stores/servlet/CVOSShowStockView?productId=927582&storeId=11352&storeId=11352&catalogId=28501&langId=-1&krypto=46Kqi7H%2B5ZzMDs8tfhrzBzmoY1PafMUQEJLnYsD17cvgmlVO8ZyCxkgPU3sMj3pbUhvMAGVmLrlJEjTMfBopJ8K4wPBwMvjTjyHt0IiclqkAQmRzITqlSYWhs7YL%2FmpFwfJfWwWYzfSaG2pygUpedO8XJCePq1ev9SVTT52cvbFjhHgTpk6a20IYhbKp2wZ7grog8glpTE4bEUJr8VSPfDHV3fy9w0C87wdjCYh%2FcOo%3D', { method: 'GET', mode: 'no-cors' })
-      .then(response => console.log(response))
+    fetch('https://simplescraper.io/api/TLm08ZmWuIodHtRNwSNX?apikey=hfpizYVrbuiovbYHofYOjbQxynacovxP&limit=100', { method: 'GET' })
+      .then(response => response.json())
       .then(data => setStockData(data))
       .catch(function(error) {
         console.log(error);
@@ -32,24 +42,24 @@ export default function Home() {
       </Head>
 
       <Container py="20" textAlign="center">
-        <Heading size="xl" mb="10" lineHeight="1.2" fontFamily="Poppins" fontWeight="900">Is Boots Essentials Curl Creme In Stock Yet?</Heading>
+        <Heading fontSize="2.5rem" mb="1" lineHeight="1.2" fontFamily="Poppins" fontWeight="900">Is Boots Essentials Curl Creme In Stock Yet?</Heading>
         <Box py="5">
           { !stockData &&
             <Box>
-              <Box mb="3" color="pink"><FontAwesomeIcon size="5x" icon={faSpinner} spin /></Box>
+              <Box mb="4" color="pink"><FontAwesomeIcon size="6x" icon={faSpinner} spin /></Box>
               <Text mb="3" fontWeight="700" fontSize="2xl">Checking...</Text>
             </Box>
           }
-          { stockData &&
+          { stockData && stockData?.data[0]['Stock Counter'] === 'Sold out online' &&
             <Box>
-              <Box mb="3" color="pink"><FontAwesomeIcon size="5x" icon={faSadCry} /></Box>
-              <Text mb="3" fontWeight="700" fontSize="3xl">No...</Text>
-              <Button onClick={e=>setStockData({})}>Check again...</Button>
+              <Box mb="3" color="pink"><FontAwesomeIcon size="6x" icon={faSadCry} /></Box>
+              <Text mb="4" fontWeight="700" fontSize="4xl">Nope</Text>
+              <Button onClick={e=>checkStock()}>Check again...</Button>
             </Box>
           }
-          { stockData &&
+          { stockData && (!stockData?.data[0]['Stock Counter'] || stockData?.data[0]['Stock Counter'] !== 'Sold out online') &&
             <Box>
-              <Box mb="3" color="pink"><FontAwesomeIcon size="5x" icon={faLaughBeam} spin /></Box>
+              <Box mb="3" color="pink"><FontAwesomeIcon size="6x" icon={faLaughBeam} spin /></Box>
               <Text mb="3" fontWeight="700" fontSize="3xl">Yes!</Text>
               <Button href="https://www.boots.com/boots-essentials-curl-creme-250ml-10088417" colorScheme="pink">Go get it!</Button>
             </Box>
